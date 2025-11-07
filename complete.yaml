@@ -119,21 +119,10 @@ display:
           it.printf(0, 8, id(roboto_black_12), "T %.1f°C", id(temp).state);
           it.printf(0, 18, id(roboto_black_12), "H %.1f%%", id(humidity).state);
 
-# it.print(0, -2, id(roboto_black_12), "BSides Syd");
-# it.printf(0, 8, id(roboto_black_12), "T %.1f°C", id(temp).state);
-# it.printf(0, 18, id(roboto_black_12), "H %.1f%%", id(humidity).state);
-# it.strftime(15, 28, id(roboto_black_12), "%H:%M:%S", id(sntp_time).now());
-      
-# font:
-#   - id: roboto_black_12
-#     file: "fonts/Roboto-Black.ttf"
-#     size: 12
-
 font:
   - id: roboto_black_12
     file: "gfonts://Roboto"
     size: 12
-
 
 interval:
   - interval: 3s
