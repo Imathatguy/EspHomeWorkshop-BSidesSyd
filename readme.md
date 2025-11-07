@@ -16,7 +16,7 @@ You will be supplied a starter pack containing:
 - USB Cable
 - F-F Dupont Cables
 - AHT30 Temperature and Humidity Sensor ([Datasheet](https://eleparts.co.kr/data/goods_attach/202306/good-pdf-12751003-1.pdf))
-![AHT30 Temperature and Humidity Sensor over I2C](<images/AHT30.png>)
+![AHT30 Temperature and Humidity Sensor over I2C](<images/aht30.png>)
 
 
 ## What software tools do I need?
