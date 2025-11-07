@@ -12,11 +12,14 @@ ESPHome is an open-source framework that allows you to easily create custom firm
 You will be supplied a starter pack containing:
 
 - ESP32-C3 0.42 OLED (Closest reference: [emalliab](https://emalliab.wordpress.com/2025/02/12/esp32-c3-0-42-oled/), [Datasheet](https://documentation.espressif.com/esp32-c3_datasheet_en.pdf))
-![ESP32-C3 with 0.42" OLED](images/esp32c3.png)
+
+<img src="images/esp32c3.png" alt="ESP32-C3 with 0.42' OLED" width="300">
+
 - USB Cable
 - F-F Dupont Cables
 - AHT30 Temperature and Humidity Sensor ([Datasheet](https://eleparts.co.kr/data/goods_attach/202306/good-pdf-12751003-1.pdf))
-![AHT30 Temperature and Humidity Sensor over I2C](<images/aht30.png>)
+
+<img src="images/aht30.png" alt="AHT30 Temperature and Humidity Sensor over I2C" width="300">
 
 
 ## What software tools do I need?
