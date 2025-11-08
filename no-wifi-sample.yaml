@@ -1,0 +1,52 @@
+esphome:
+  name: esp32-sample1245714
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+logger:
+
+status_led:
+  pin: GPIO08
+
+i2c:
+  - id: bus_a
+    sda: GPIO5
+    scl: GPIO6
+    frequency: 400kHz
+    scan: true
+
+sensor:
+  - platform: aht10 # Base class
+    variant: AHT20 # AHT 20 and 30 both
+    i2c_id: bus_a
+    address: 0x38
+    temperature:
+      name: "Temperature"
+      id: temp
+    humidity:
+      name: "Humidity"
+      id: humidity
+    update_interval: 10s
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 72x40"
+    i2c_id: bus_a
+    address: 0x3C
+    id: oled_display
+    lambda: |-
+      it.printf(0, 8, id(font_rob), "T %.1f°C", id(temp).state);
+      it.printf(0, 18, id(font_rob), "H %.1f%%", id(humidity).state);
+
+interval:
+  - interval: 15sec
+    then:
+      - component.update: oled_display
+      
+font:
+  - id: font_rob
+    file: "gfonts://Roboto"
+    size: 12
