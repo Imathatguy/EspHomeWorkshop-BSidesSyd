@@ -1,30 +1,58 @@
+# --- Project configuration ---
+# Docs: https://esphome.io/guides/configuration-types.html#esphome
 esphome:
   name: esp32-complete
+# --- End of project configuration ---
 
+
+# --- ESP32 board and framework selection ---
+# Docs (ESP32): https://esphome.io/components/esp32.html
 esp32:
+  # Board list: https://registry.platformio.org/platforms/platformio/espressif32/boards?version=5.3.0
   board: esp32-c3-devkitm-1
   framework:
-    type: esp-idf
+    # https://esphome.io/components/esp32.html#using-esp-idf
+    type: esp-idf  
+# --- End of ESP32 configuration ---
 
+
+# --- Enable logging over UART and network ---
+# Docs: https://esphome.io/components/logger.html
 logger:
+# --- End of logger ---
 
+
+# --- Wi-Fi setup (connect to your network) ---
+# Docs: https://esphome.io/components/wifi.html
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+# --- End of Wi-Fi setup ---
 
+
+# --- Status LED to show device state (booting, error, Wi-Fi) ---
+# Docs: https://esphome.io/components/status_led.html
 status_led:
   pin: GPIO08
+# --- End of status LED ---
 
+
+# --- I2C bus definition for sensors and displays ---
+# Docs: https://esphome.io/components/i2c.html
 i2c:
   - id: bus_a
     sda: GPIO5
     scl: GPIO6
     frequency: 400kHz
     scan: true
+# --- End of I2C configuration ---
 
+
+# --- Sensor setup (AHT30 temp/humidity over I2C) ---
+# Base sensor docs (AHT10): https://esphome.io/components/sensor/aht10.html
 sensor:
-  - platform: aht10 # Base class
-    variant: AHT20 # AHT 20 and 30 both
+  - platform: aht10
+    variant: AHT20  # AHT30 is supported by the same component
     i2c_id: bus_a
     address: 0x38
     temperature:
@@ -34,7 +62,11 @@ sensor:
       name: "Humidity"
       id: humidity
     update_interval: 3s
+# --- End of sensor setup ---
 
+
+# --- Time synchronization using SNTP (internet time) ---
+# Docs: https://esphome.io/components/time/sntp.html
 time:
   - platform: sntp
     id: sntp_time
@@ -43,7 +75,12 @@ time:
      - 0.pool.ntp.org
      - 1.pool.ntp.org
      - 2.pool.ntp.org
+# --- End of time setup ---
 
+
+# --- OLED display configuration (SSD1306 over I2C) ---
+# Display docs: https://esphome.io/components/display/index.html
+# SSD1306 I2C docs: https://esphome.io/components/display/ssd1306.html
 display:
   - platform: ssd1306_i2c
     model: "SSD1306 72x40"
@@ -51,11 +88,14 @@ display:
     address: 0x3C
     id: oled_display
     rotation: 0
-    # update_interval: 1s  
     offset_y: 0
     offset_x: 0
-    # invert: false  # Optional
+
+    # --- Define multiple display pages ---
+    # Display static text: https://esphome.io/components/display/index.html#drawing-static-text
+    # Display formatted text: https://esphome.io/components/display/index.html#formatted-text
     pages:
+      # --- Page 0: custom bitmap rendering on display ---
       - id: page0
         lambda: |-
           // 72x40 mono bitmap (re-inverted), MSB-first per row. '1' = white pixel on black background.
@@ -92,6 +132,7 @@ display:
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
           };
 
+
           const int IMG_W = 72;
           const int IMG_H = 40;
           const int BYTES_PER_ROW = (IMG_W + 7) / 8;
@@ -110,22 +151,40 @@ display:
               }
             }
           }
+      # --- End of Page 0 ---
+
+      # --- Page 1: text + current time from SNTP ---
       - id: page1
         lambda: |-
           it.print(0, -2, id(roboto_black_12), "BSides Syd");
           it.strftime(15, 28, id(roboto_black_12), "%H:%M:%S", id(sntp_time).now());
+      # --- End of Page 1 ---
+
+      # --- Page 2: show sensor values (temp + humidity) ---
       - id: page2
         lambda: |-
           it.printf(0, 8, id(roboto_black_12), "T %.1f°C", id(temp).state);
           it.printf(0, 18, id(roboto_black_12), "H %.1f%%", id(humidity).state);
+      # --- End of Page 2 ---
+# --- End of display configuration ---
 
+
+# --- Font configuration (load Roboto from Google Fonts) ---
+# Docs: https://esphome.io/components/font.html
 font:
   - id: roboto_black_12
     file: "gfonts://Roboto"
     size: 12
+# --- End of font configuration ---
 
+
+# --- Interval automation: rotate display pages every 3 seconds ---
+# Docs: https://esphome.io/components/interval.html
 interval:
   - interval: 3s
     then:
-      - display.page.show_next: oled_display
+      # https://esphome.io/components/display/index.html#display-pages
+      - display.page.show_next: oled_display  
+      # https://esphome.io/automations/actions/
       - component.update: oled_display
+# --- End of interval automation ---
