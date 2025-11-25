@@ -74,3 +74,10 @@ The last step on your `esphome` installation, run the following, where the name 
 
 `esphome run complete.yaml`
 
+## Home Assistant integration
+
+While we did not demo this during the workshop, as you need a prior HomeAssistant (HA) instance, the simplest way to enable integration with HA is by adding the `api:` component in your configuration.
+
+[https://esphome.io/components/api/](https://esphome.io/components/api/)
+
+If you would like to not have a separate python environment with esphome, checkout the ESPHome builder extension on HA: [https://esphome.io/guides/getting_started_hassio/](https://esphome.io/guides/getting_started_hassio/)
