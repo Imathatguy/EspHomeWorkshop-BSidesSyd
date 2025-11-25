@@ -68,6 +68,9 @@ Create your own `secrets.yaml` before attempting to compile the complete configu
 ### Building and Flashing
 It is very important that all devices have a unique name, as the device name will become the hostname for this device.
 
-The last step on your `esphome` installation, run:
+The last step on your `esphome` installation, run the following, where the name of the target configuration is the last argument.
 
 `esphome run cleanstate.yaml`
+
+`esphome run complete.yaml`
+
