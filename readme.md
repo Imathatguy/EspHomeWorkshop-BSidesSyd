@@ -39,15 +39,35 @@ The core of all ESPHome configurations is YAML, (https://esphome.io/guides/yaml/
 
 Your best friend for resources will be the ESPHome website. [(https://esphome.io/components/)](https://esphome.io/components/)
 
+
+### Clean Slate
 Every ESP32-C3 has been pre-flashed with the [`cleanstate.yaml`](cleanstate.yaml) configuration.
 
+
+### Complete Example
 A complete example that connects the ESP32-C3 to a wireless network, synchronizes the datetime over the internet, interfaces with the OLED, and AHT30 sensor over I2C, and displays measurements is provided in [`complete.yaml`](complete.yaml).
 
+
+In this example, the supplied 4 wire F-F connector should map as follows:
+
+| AHT30 Pins | ESP32-C3 Pins |
+| ---------- | -------- |
+| VIN (Vin, for power and logic level) | V3 (3.3V Regulated ESP supply) |
+| GND (Ground)       | GD (ESP32 Ground) |
+| SCL (I2C Serial Clock) | 5  (GPIO5) |
+| SDA (I2C Serial Data)  | 6  (GPIO6) |
+
+Many modern microcontrollers feature a GPIO matrix that allows for remapping of functional connections (e.g. ADC, DAC, IO, UART, I2C) to other physical pins. We have declared in our `.yaml` the use of GPIO 5 and 6 for the I2C bus.
+
+### Managing Secrets
 An example secrets file is presented in [`example-secrets.yaml`](example-secrets.yaml)
 Create your own `secrets.yaml` before attempting to compile the complete configuration.
 
 ```cp example-secrets.yaml secrets.yaml```
 
+### Building and Flashing
 It is very important that all devices have a unique name, as the device name will become the hostname for this device.
+
+The last step on your `esphome` installation, run:
 
 `esphome run cleanstate.yaml`
